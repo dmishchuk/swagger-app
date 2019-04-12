@@ -1,0 +1,102 @@
+swagger: '2.0'
+info:
+  description: This is a simple API
+  version: 1.0.0
+  title: Simple Cities API
+  # put the contact info for your development or API team
+  contact:
+    email: you@your-company.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /city:
+    get:
+      tags:
+      - developers
+      summary: get city
+      operationId: getCity
+      description: |
+        By passing in the appropriate options, you can search for city in the system
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: searchString
+        description: pass an optional search string for looking up city
+        required: false
+        type: string
+      - in: query
+        name: skip
+        description: number of records to skip for pagination
+        type: integer
+        format: int32
+        minimum: 0
+      - in: query
+        name: limit
+        description: maximum number of records to return
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 50
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CityItem'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - admins
+      summary: adds an city item
+      operationId: addCity
+      description: Adds an item to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: cityItem
+        description: City item to add
+        schema:
+          $ref: '#/definitions/CityItem'
+      responses:
+        201:
+          description: item created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing item already exists
+definitions:
+  CityItem:
+    type: object
+    required:
+    - id
+    - name
+    - county
+    - capital
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      name:
+        type: string
+        example: Brest
+      county:
+        type: string
+        example: Belarus
+      capital:
+        type: boolean
+        example: false
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /dmishchuk-app/dmishchuk-cities/1.0.0
+schemes:
+ - https
